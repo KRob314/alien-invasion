@@ -37,6 +37,7 @@
   <ItemGroup>
     <Content Include="images\alien.bmp" />
     <Content Include="images\alien2.bmp" />
+    <Content Include="images\ship3.bmp" />
     <Content Include="images\ship.bmp" />
     <Content Include="images\ship1.bmp" />
     <Content Include="images\ship_large.bmp" />

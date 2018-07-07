@@ -1,4 +1,6 @@
 import sys
+import datetime
+import os
 from time import sleep
 
 import pygame
@@ -24,8 +26,7 @@ def check_keyup_events(event, ship):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
 
-def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
-        bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     """Respond to keypresses and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -39,8 +40,7 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
             check_play_button(ai_settings, screen, stats, sb, play_button,
                 ship, aliens, bullets, mouse_x, mouse_y)
             
-def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
-        aliens, bullets, mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Start a new game when the player clicks Play."""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
@@ -75,8 +75,7 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
 
-def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
-        play_button):
+def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button):
     """Update images on the screen, and flip to the new screen."""
     # Redraw the screen, each pass through the loop.
     screen.fill(ai_settings.bg_color)
@@ -126,6 +125,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
             stats.score += ai_settings.alien_points * len(aliens)
             sb.prep_score()
         check_high_score(stats, sb)
+
     
     if len(aliens) == 0:
         # If the entire fleet is destroyed, start a new level.
@@ -163,7 +163,16 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     else:
         stats.game_active = False
         pygame.mouse.set_visible(True)
-    
+ 
+        fileName = os.getcwd() + '\\score2.txt'
+
+        with open(fileName, 'a') as file_object:
+            file_object.write(str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+            file_object.write('\nScore: ' + str(stats.score))
+            file_object.write('\nLevel: ' + str(stats.level))
+            file_object.write('\nGameMode: ' + str(ai_settings.shipImage))
+            file_object.write('\n ----\n')
+            
     # Empty the list of aliens and bullets.
     aliens.empty()
     bullets.empty()
@@ -175,8 +184,7 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     # Pause.
     sleep(0.5)
     
-def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens,
-        bullets):
+def check_aliens_bottom(ai_settings, screen, stats, sb, ship, aliens, bullets):
     """Check if any aliens have reached the bottom of the screen."""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():

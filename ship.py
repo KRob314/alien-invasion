@@ -10,8 +10,16 @@ class Ship(Sprite):
         self.ai_settings = ai_settings
 
         # Load the ship image, and get its rect.
-        #ship = input("choose ship 1 or 2: ")
-        self.image = pygame.image.load('images/ship.bmp')                    
+      
+        if self.ai_settings.shipImage == "1":
+            self.image = pygame.image.load('images/ship.bmp')
+        if self.ai_settings.shipImage == "2":
+            self.image = pygame.image.load('images/ship1.bmp')
+        if self.ai_settings.shipImage == "3":
+             self.image = pygame.image.load('images/ship3.bmp')
+        else:
+            self.image = pygame.image.load('images/ship.bmp') 
+                     
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
